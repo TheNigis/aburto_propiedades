@@ -1,0 +1,409 @@
+
+<link rel="stylesheet" href="/static/css/landing.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+
+<style>
+
+
+    .container {
+        max-width: 1000px;
+        width: 100%;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .container_2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+        max-width: 1000px;
+        width: 100%;
+        padding: 20px;
+    }
+
+
+    .property-header {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .property-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .property-info img {
+        max-width: 100%;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .badge {
+        display: inline-block;
+        color: white;
+        padding: 5px 10px;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+
+    .price {
+        font-size: 32px;
+        font-weight: bold;
+        color: #000;
+        margin: 10px 0;
+    }
+
+    .details {
+        list-style: none;
+        padding: 0;
+    }
+
+    .details li {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .gallery {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .gallery img {
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .gallery img:hover {
+        transform: scale(1.1);
+        transition: 0.3s;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 5px;
+    }
+
+    .close, .prev, .next {
+        position: absolute;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .close {
+        top: 20px;
+        right: 30px;
+    }
+
+    .prev {
+        left: 20px;
+    }
+
+    .next {
+        right: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .property-info {
+            flex-direction: column;
+        }
+    }
+
+    .container-plus{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+        flex-direction: column;
+    }
+
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        position: relative;
+        background-color: white;
+    }
+
+    .card_2 {
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        background-color: white;
+    }
+
+
+    .card img {
+        width: 100%;
+        height: auto;
+    }
+
+    .badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: white;
+        padding: 5px 10px;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+
+    .card-content {
+        padding: 15px;
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .price {
+        font-size: 24px;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 10px;
+    }
+
+    .location {
+        display: flex;
+        align-items: center;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .location::before {
+        content: '\1F4CD'; /* Icono de ubicación */
+        margin-right: 5px;
+    }
+</style>
+
+<div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-6">
+    <div class="card_2 mx-4 my-2">
+        <img src="<%= propiedad.fotos[0].replace("./public", "/static")%>" class="w-full h-64 object-cover" alt="Foto de la propiedad" onclick="openModal(0)">
+        <div class="badge" id="banner"></div>
+    </div>
+
+
+    <div class="p-6">
+        <h2 class="text-2xl font-bold text-gray-800"><%= propiedad.nombre %></h2>
+        <p class="mt-2 text-3xl font-semibold text-green-600" id="price"></p>
+        <!-- <span class="inline-block bg-blue-500 text-white text-sm px-3 py-1 mt-2 rounded">ARRIENDO</span> -->
+    </div>
+
+
+    <div class="border-t">
+        <div class="p-4 border-b flex justify-between"><span class="font-semibold"><i class="fa-solid fa-tags mr-2"></i>Tipo:</span> <%= propiedad.detalles.tipo_acuerdo %></div>
+        <div class="p-4 border-b flex justify-between"><span class="font-semibold"><i class="fa-solid fa-location-dot mr-2"></i>Ubicación:</span> <%= propiedad.region %>, <%= propiedad.comuna %></div>
+        <div class="p-4 border-b flex justify-between"><span class="font-semibold"><i class="fa-solid fa-bed mr-2"></i>Habitaciones:</span> <%= propiedad.detalles.habitaciones %></div>
+        <div class="p-4 border-b flex justify-between"><span class="font-semibold"><i class="fa-solid fa-bath mr-2"></i>Baños:</span> <%= propiedad.detalles.baños %></div>
+        <div class="p-4 border-b flex justify-between"><span class="font-semibold"><i class="fa-solid fa-calendar-days mr-2"></i>Publicado el:</span> <h1 id="fecha_creado"></h1></div>
+        <!-- <div class="p-4 border-b flex justify-between"><span class="font-semibold">Contacto:</span> Francisco Aravena</div> -->
+        <div class="p-4 flex justify-between"><span class="font-semibold"><i class="fa-solid fa-phone mr-2"></i>Teléfono:</span> +569 <%= propiedad.contacto %></div>
+    </div>
+
+    <div class="p-6">
+        <p class="text-gray-700"><%= propiedad.descripcion %></p>
+    </div>
+
+    <div class="p-6">
+        <h3 class="text-xl font-bold mb-4"><i class="fa-solid fa-image mr-2"></i>Galería de imágenes</h3>
+
+        <div class="grid grid-cols-3 gap-4" id="galeria_fotos"></div>
+    </div>
+</main>
+
+<div class="modal" id="imageModal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <span class="prev" onclick="prevImage()">&#10094;</span>
+    <img id="modalImg">
+    <span class="next" onclick="nextImage()">&#10095;</span>
+</div>
+
+<section class="my-5">
+    <div class="contenedor_2">
+        <h2 class="titulo"><a name="portafolio">Propiedades destacadas</a></h2>
+        <div class="galeria-port" id="galeria-port"></div>
+    </div>
+</section>
+
+
+<script>
+
+    let aleatorios = <%- JSON.stringify(aleatorios) %>;
+
+    // let servicio_destacado = document.getElementById("servicio-destacado");
+    let galeria_port = document.getElementById("galeria-port");
+
+    // servicio_destacado.innerHTML = "";
+    galeria_port.innerHTML = "";
+
+    
+    for(let i = 0; i< aleatorios.length; i++){
+        let disponible = true;
+
+        if(aleatorios[i].tipo_moneda == "UF"){
+            const formatter = new Intl.NumberFormat('es-CL', {
+                style: 'currency',
+                currency: "CLP",
+                trailingZeroDisplay: 'stripIfInteger'
+            });
+
+            aleatorios[i].price = formatter.format(aleatorios[i].price).replace("$", "") + " UF"
+        } else{
+            const formatter = new Intl.NumberFormat('es-CL', {
+                style: 'currency',
+                currency: aleatorios[i].tipo_moneda,
+                trailingZeroDisplay: 'stripIfInteger'
+            });
+            
+            aleatorios[i].price = formatter.format(aleatorios[i].price);
+        }
+
+        if (aleatorios[i].detalles.estado == "ARRENDADO" || aleatorios[i].detalles.estado == "VENDIDO" ){
+            disponible = false;
+        }
+
+        let color = "bg-green-500"
+        let msg = aleatorios[i].detalles.tipo_acuerdo
+        
+        if (!disponible){
+            color = "bg-red-500"
+            msg = aleatorios[i].detalles.estado
+        }
+
+        galeria_port.innerHTML += `
+
+                <a href="/propiedad/${aleatorios[i]._id}" class="card mx-4 my-2" id="carta_${aleatorios[i]._id}">
+                    <img src="${aleatorios[i].fotos[0].replace("./public", "/static")}" alt="">
+                    <div class="badge ${color}">${msg}</div>
+                    <div class="card-content">
+                        <div class="title">${aleatorios[i].nombre}</div>
+                        <div class="price">${aleatorios[i].price}</div>
+                        <div class="location">${aleatorios[i].comuna}, ${aleatorios[i].provincia}, ${aleatorios[i].region}</div>
+                    </div>
+                </a>
+
+
+        `
+
+    }
+
+    let propiedad = <%- JSON.stringify(propiedad) %>;
+
+    if(propiedad.tipo_moneda == "UF"){
+        const formatter = new Intl.NumberFormat('es-CL', {
+            style: 'currency',
+            currency: "CLP",
+            trailingZeroDisplay: 'stripIfInteger'
+        });
+
+        propiedad.price = formatter.format(propiedad.price).replace("$", "") + " UF"
+    } else{
+        const formatter = new Intl.NumberFormat('es-CL', {
+            style: 'currency',
+            currency: propiedad.tipo_moneda,
+            trailingZeroDisplay: 'stripIfInteger'
+        });
+        
+        propiedad.price = formatter.format(propiedad.price);
+    }
+
+    document.getElementById("price").innerHTML = propiedad.price;
+
+
+    const today = new Date(propiedad.createdAt);
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; // Months start at 0!
+    let dd = today.getDate();
+
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    const formattedToday = dd + '/' + mm + '/' + yyyy;
+    document.getElementById("fecha_creado").innerHTML = formattedToday;
+
+
+    const galeria = document.getElementById("galeria_fotos");
+    let images = [];
+
+    for(i = 0; i < propiedad.fotos.length; i++){
+        link = propiedad.fotos[i].replace("./public", "/static")
+        images.push(link);
+        console.log(link);
+        
+        galeria.innerHTML += `
+            <img src="${link}" alt="Foto ${i}" class="w-full h-32 object-cover cursor-pointer" onclick="openModal(${i})">
+        `
+    }
+
+    let currentIndex = 0;
+
+
+    let disponible = true;
+
+    if (propiedad.detalles.estado == "ARRENDADO" || propiedad.detalles.estado == "VENDIDO" ){
+        disponible = false;
+    }
+
+    let color = "bg-green-500"
+    let msg = propiedad.detalles.tipo_acuerdo
+
+    if (!disponible){
+        color = "bg-red-500"
+        msg = propiedad.detalles.estado;
+    }
+
+    document.getElementById("banner").classList.add(color);
+    document.getElementById("banner").innerHTML = msg
+
+    function openModal(index) {
+        currentIndex = index;
+        document.getElementById('modalImg').src = images[currentIndex];
+        document.getElementById('imageModal').style.display = 'flex';
+    }
+    
+    function closeModal() {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+
+    function prevImage() {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+        document.getElementById('modalImg').src = images[currentIndex];
+    }
+
+    function nextImage() {
+        currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+        document.getElementById('modalImg').src = images[currentIndex];
+    }
+</script>

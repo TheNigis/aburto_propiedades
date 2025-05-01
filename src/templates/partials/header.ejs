@@ -1,0 +1,47 @@
+<header class="bg-green-600 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+          <!-- Logo -->
+          <div class="flex items-center space-x-3">
+                <a href="#" onclick="window.history.back()">
+                    <div class="px-2 py-2 bg-white rounded-xl">
+                        <img src="/static/images/logotipo-def.png" alt="Aburto Propiedades" class="h-10 w-auto">
+                    </div>
+                </a>
+          </div>
+
+          <!-- Menú de navegación -->
+          <nav class="hidden md:flex space-x-6">
+              <a href="/" class="text-gray-300 hover:text-white">
+                  <i class="fa-solid fa-play mr-2"></i>Inicio
+              </a>
+              <a href="/#propiedades" class="text-gray-300 hover:text-white">
+                  <i class="fa-solid fa-house mr-2"></i>Propiedades
+              </a>
+              <a href="/#footer" class="text-gray-300 hover:text-white">
+                  <i class="fa-solid fa-address-book mr-2"></i>Contacto
+              </a>
+          </nav>
+
+          <!-- Botón de menú para móviles -->
+          <div class="md:hidden">
+              <button id="menu-toggle" class="text-gray-300 hover:text-white" aria-label="Abrir menú">
+                  <i class="fas fa-bars"></i>
+              </button>
+          </div>
+      </div>
+  </div>
+</header>
+
+<!-- Menú desplegable para móviles -->
+<div id="mobile-menu" class="md:hidden hidden bg-green-500 text-white p-4">
+  <a href="/" class="block py-2"><i class="fa-solid fa-play mr-2"></i>Inicio</a>
+  <a href="/#propiedades" class="block py-2"><i class="fa-solid fa-house mr-2"></i>Propiedades</a>
+  <a href="/#footer" class="block py-2"><i class="fa-solid fa-address-book mr-2"></i>Contacto</a>
+</div>
+
+<script>
+  document.getElementById('menu-toggle').addEventListener('click', function () {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>

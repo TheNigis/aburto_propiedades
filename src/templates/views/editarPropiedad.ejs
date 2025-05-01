@@ -1,0 +1,666 @@
+
+<link rel="stylesheet" href="/static/css/landing.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+
+<!-- JavaScript -->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+
+
+<style>
+    .container {
+        max-width: 1000px;
+        width: 100%;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .container_2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+        max-width: 1000px;
+        width: 100%;
+        padding: 20px;
+    }
+
+
+    .property-header {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .property-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .property-info img {
+        max-width: 100%;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .badge {
+        display: inline-block;
+        color: white;
+        padding: 5px 10px;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+
+    .price {
+        font-size: 32px;
+        font-weight: bold;
+        color: #000;
+        margin: 10px 0;
+    }
+
+    .details {
+        list-style: none;
+        padding: 0;
+    }
+
+    .details li {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .gallery {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .gallery img {
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .gallery img:hover {
+        transform: scale(1.1);
+        transition: 0.3s;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 5px;
+    }
+
+    .close, .prev, .next {
+        position: absolute;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .close {
+        top: 20px;
+        right: 30px;
+    }
+
+    .prev {
+        left: 20px;
+    }
+
+    .next {
+        right: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .property-info {
+            flex-direction: column;
+        }
+    }
+
+    .container-plus{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+        flex-direction: column;
+    }
+
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        position: relative;
+        background-color: white;
+    }
+
+    .card_2 {
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        background-color: white;
+    }
+
+
+    .card img {
+        width: 100%;
+        height: auto;
+    }
+
+    .badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: white;
+        padding: 5px 10px;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+
+    .card-content {
+        padding: 15px;
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .price {
+        font-size: 24px;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 10px;
+    }
+
+    .location {
+        display: flex;
+        align-items: center;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .location::before {
+        content: '\1F4CD'; /* Icono de ubicación */
+        margin-right: 5px;
+    }
+</style>
+
+<div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden my-6">
+    <div class="card_2 mx-4 my-2">
+        <img src="<%= propiedad.fotos[0].replace("./public", "/static")%>" class="w-full h-64 object-cover" alt="Foto de la propiedad" onclick="openModal(0)">
+        <div class="badge" id="banner"></div>
+    </div>
+
+
+    <div class="p-6">
+        <h2 class="text-2xl font-bold text-gray-800"><%= propiedad.nombre %></h2>
+        <p class="mt-2 text-3xl font-semibold text-green-600" id="price_html"></p>
+        <!-- <span class="inline-block bg-blue-500 text-white text-sm px-3 py-1 mt-2 rounded">ARRIENDO</span> -->
+    </div>
+
+    <form id="formulario" class="mx-4">
+        <div class="flex -mx-3">
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Nombre de la propiedad</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                    <input required value="<%= propiedad.nombre %>" name="nombre" id="nombre" type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" >
+                </div>
+            </div>
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Descripcion</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                    <input required value="<%= propiedad.descripcion %>" name="descripcion" id="descripcion" type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Esta amplia propiedad posee...">
+                </div>
+            </div>
+        </div>
+
+        <div class="flex -mx-3">
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Tipo de Propiedad</label>
+                <select aria-required="true" value="<%= propiedad.tipo %>" id="tipo" name="tipo" class="block rounded-lg border border-grey-dark w-full p-2 text-gray-700 leading-tight
+                    focus:outline-none focus:shadow-outline focus:ring focus:ring-green-500 transition duration-300 ease-in-out" required>
+                        <option value="" disabled selected>Seleccionar</option>
+                        <option value="CASA">Casa</option>
+                        <option value="PARCELA">Parcela</option>
+                        <option value="DEPARTAMENTO">DEPARTAMENTO</option>
+                        <option value="BODEGA">Bodega</option>
+                        <option value="CASA_COMERCIAL">Casa Comercial</option>
+                </select>
+            </div>
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Telefono</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><span class="fi fi-cl"></span></div>
+                    <input required name="contacto" id="contacto" type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="987654321">
+                </div>
+            </div>
+        </div>
+
+        <div class="flex -mx-3">
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Tipo de acuerdo</label>
+                <select aria-required="true" id="tipo_acuerdo" name="tipo_acuerdo" class="block rounded-lg border border-grey-dark w-full p-2 text-gray-700 leading-tight
+                    focus:outline-none focus:shadow-outline focus:ring focus:ring-green-500 transition duration-300 ease-in-out" required>
+                        <option value="" disabled selected>Seleccionar</option>
+                        <option value="VENTA">Venta</option>
+                        <option value="ARRIENDO">Arriendo</option>
+                </select>
+            </div>
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">¿Está aún disponible?</label>
+                <select aria-required="true" id="estado" name="estado" class="block rounded-lg border border-grey-dark w-full p-2 text-gray-700 leading-tight
+                    focus:outline-none focus:shadow-outline focus:ring focus:ring-green-500 transition duration-300 ease-in-out" required>
+                        <option value="" disabled selected>Seleccionar</option>
+                        <option value="DISPONIBLE">Disponible</option>
+                        <option value="VENDIDO">Vendido</option>
+                        <option value="ARRENDADO">Arrendado</option>
+                </select>
+            </div>
+
+
+        </div>
+
+        <div class="flex -mx-3">
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Número de baños</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                    <input required name="baños" id="baños" type="number" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="1">
+                </div>
+            </div>
+
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Número de habitaciones</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                    <input required name="habitaciones" id="habitaciones" type="number" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="2">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex -mx-3">
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">¿Qué moneda?</label>
+                <select aria-required="true" id="tipo_moneda" name="tipo_moneda" class="block rounded-lg border border-grey-dark w-full p-2 text-gray-700 leading-tight
+                    focus:outline-none focus:shadow-outline focus:ring focus:ring-green-500 transition duration-300 ease-in-out" required>
+                        <option value="" disabled selected>Seleccionar</option>
+                        <option value="CLP">CLP</option>
+                        <option value="UF">UF</option>
+                        <option value="USD">USD</option>
+                </select>
+            </div>
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Precio</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                    <input required name="price" id="price" value="<%= propiedad.price %>" type="number" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Esta amplia propiedad posee...">
+                </div>
+            </div>
+        </div>
+
+        <div class="flex -mx-3">
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">País</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                    <input disabled type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Chile">
+                </div>
+            </div>
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Región</label>
+                <select aria-required="true" id="region" name="region" class="block rounded-lg border border-grey-dark w-full p-2 text-gray-700 leading-tight
+                    focus:outline-none focus:shadow-outline focus:ring focus:ring-green-500 transition duration-300 ease-in-out" required>
+                        <option value="" disabled selected>Seleccionar</option>
+                        <option value="1">XV: ARICA Y PARINACOTA</option>
+                        <option value="2">I: TARAPACÁ</option>
+                        <option value="3">II: ANTOFAGASTA</option>
+                        <option value="4">III: ATACAMA</option>
+                        <option value="5">IV: COQUIMBO</option>
+                        <option value="6">V: VALPARAÍSO</option>
+                        <option value="7">RM: METROPOLITANA DE SANTIAGO</option>
+                        <option value="8">VI: LIBERTADOR GENERAL BERNARDO O'HIGGINS</option>
+                        <option value="9">VII: MAULE</option>
+                        <option value="10">XVI: ÑUBLE</option>
+                        <option value="11">VIII: BIOBÍO</option>
+                        <option value="12">IX: ARAUCANÍA</option>
+                        <option value="13">XIV: LOS RÍOS</option>
+                        <option value="14">X: LOS LAGOS</option>
+                        <option value="15">XI: AYSÉN DEL GENERAL CARLOS IBÁÑEZ DEL CAMPO</option>
+                        <option value="16">XII: MAGALLANES</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="flex -mx-3">
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Provincia</label>
+                <select aria-required="true" id="provincia" name="provincia" class="block rounded-lg border border-grey-dark w-full p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring focus:ring-green-500 transition duration-300 ease-in-out" required>
+                    <option value="" disabled selected>Seleccionar</option>
+                </select>
+            </div>
+            <div class="w-1/2 px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Comuna</label>
+                <select aria-required="true" id="comuna" name="comuna" class="block rounded-lg border border-grey-dark w-full p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring focus:ring-green-500 transition duration-300 ease-in-out">
+                    <option value="" disabled selected>Seleccionar</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex -mx-3">
+
+            <div class="w-full px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Dirección</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                    <input required name="lugar" id="lugar" type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Tucapel 219">
+                </div>
+            </div>
+        </div>
+
+        <div class="flex -mx-3">
+            <div class="w-full px-3 mb-5">
+                <button id ="boton-crear" class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold">Guardar 😊</button>
+            </div>
+        </div>
+    </form>
+
+
+    <button id ="boton-eliminar" class="block w-full max-w-xs mx-auto bg-red-500 hover:bg-red-700 focus:bg-red-700 text-white rounded-lg px-3 py-3 font-semibold">Eliminar propiedad</button>
+
+
+    <div class="p-6">
+        <h3 class="text-xl font-bold mb-4"><i class="fa-solid fa-image mr-2"></i>Galería de imágenes</h3>
+
+        <div class="grid grid-cols-3 gap-4" id="galeria_fotos"></div>
+    </div>
+</div>
+
+<div class="modal" id="imageModal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <span class="prev" onclick="prevImage()">&#10094;</span>
+    <img id="modalImg">
+    <span class="next" onclick="nextImage()">&#10095;</span>
+</div>
+
+<script>
+    const region = document.getElementById('region');
+    const provincia = document.getElementById('provincia');
+    const comuna = document.getElementById('comuna');
+
+    const divisionPoliticaTerritoriaChile = <%- JSON.stringify(divisionTerritorial); %>
+
+    region.addEventListener('change', function(e) {
+        const index = Number(e.target.value) - 1;
+        const provincias = divisionPoliticaTerritoriaChile.regiones[index].region.provincias;
+
+        provincia.innerHTML = '';
+        comuna.innerHTML = '';
+
+        console.log("hola");
+        
+        
+        let toRender = provincias.map(p => {
+            const option = document.createElement('option');
+
+            option.value = p.provincia.nombre;
+            option.innerHTML = p.provincia.nombre;
+
+            provincia.appendChild(option)
+        });
+    });
+
+
+    provincia.addEventListener('change', function(e) {
+        const indexRegion = Number(region.value) - 1;
+        const p = divisionPoliticaTerritoriaChile.regiones[indexRegion].region.provincias.find( (p) => p.provincia.nombre === e.target.value );
+
+        comuna.innerHTML = '';
+
+        let toRender = p.provincia.comunas.map(c => {
+            const option = document.createElement('option');
+
+            option.value = c.comuna.nombre;
+            option.innerHTML = c.comuna.nombre;
+
+            comuna.appendChild(option)
+        });
+    });
+</script>
+
+<script>
+    let propiedad = <%- JSON.stringify(propiedad) %>;
+    
+    document.getElementById("nombre").value = propiedad.nombre
+    document.getElementById("descripcion").value = propiedad.descripcion
+    
+    document.getElementById("tipo").value = propiedad.tipo
+
+    document.getElementById("baños").value = propiedad.detalles.baños
+    document.getElementById("habitaciones").value = propiedad.detalles.habitaciones
+    document.getElementById("tipo_acuerdo").value = propiedad.detalles.tipo_acuerdo
+    document.getElementById("estado").value = propiedad.detalles.estado
+
+    document.getElementById("contacto").value = propiedad.contacto
+
+    document.getElementById("tipo_moneda").value = propiedad.tipo_moneda
+    document.getElementById("price").value = propiedad.price
+        
+    document.getElementById("lugar").value = propiedad.lugar
+
+    document.getElementById("comuna").value = propiedad.comuna
+    document.getElementById("provincia").value = propiedad.provincia
+    document.getElementById("region").value = propiedad.region_numero
+
+    if(propiedad.region_numero){
+        const index = Number(propiedad.region_numero) - 1;
+    
+        const region_guardada = divisionPoliticaTerritoriaChile.regiones[index].region.provincias;
+        const provincia_guardada = region_guardada.find( (p) => p.provincia.nombre === propiedad.provincia );
+        const comuna_guardada = provincia_guardada.provincia.comunas.find((c) => c.comuna.nombre === propiedad.comuna); 
+
+        const provincia_guardada_html = document.createElement('option');
+        provincia_guardada_html.value = provincia_guardada.provincia.nombre;
+        provincia_guardada_html.innerHTML = provincia_guardada.provincia.nombre;
+
+        provincia.appendChild(provincia_guardada_html)
+
+        const comuna_guardada_html = document.createElement('option');
+        comuna_guardada_html.value = comuna_guardada.comuna.nombre;
+        comuna_guardada_html.innerHTML = comuna_guardada.comuna.nombre;
+
+        comuna.appendChild(comuna_guardada_html);
+
+    }
+
+    if(propiedad.tipo_moneda == "UF"){
+        const formatter = new Intl.NumberFormat('es-CL', {
+            style: 'currency',
+            currency: "CLP",
+            trailingZeroDisplay: 'stripIfInteger'
+        });
+
+        propiedad.price = formatter.format(propiedad.price).replace("$", "") + " UF"
+    } else{
+        const formatter = new Intl.NumberFormat('es-CL', {
+            style: 'currency',
+            currency: propiedad.tipo_moneda,
+            trailingZeroDisplay: 'stripIfInteger'
+        });
+        
+        propiedad.price = formatter.format(propiedad.price);
+    }
+
+    document.getElementById("price_html").innerHTML = propiedad.price;
+
+
+    const galeria = document.getElementById("galeria_fotos");
+    let images = [];
+
+    for(i = 0; i < propiedad.fotos.length; i++){
+        link = propiedad.fotos[i].replace("./public", "/static")
+        images.push(link);
+        console.log(link);
+        
+
+        galeria.innerHTML += `
+            <img src="${link}" alt="Foto ${i}" class="w-full h-32 object-cover cursor-pointer" onclick="openModal(${i})">
+        `;
+    }
+
+    let currentIndex = 0;
+
+
+    
+    let disponible = true;
+
+    if (propiedad.detalles.estado == "ARRENDADO" || propiedad.detalles.estado == "VENDIDO" ){
+        disponible = false;
+    }
+
+    let color = "bg-green-500"
+    let msg = propiedad.detalles.tipo_acuerdo
+
+    if (!disponible){
+        color = "bg-red-500"
+        msg = propiedad.detalles.estado;
+    }
+
+    document.getElementById("banner").classList.add(color);
+    document.getElementById("banner").innerHTML = msg
+
+    function openModal(index) {
+        currentIndex = index;
+        document.getElementById('modalImg').src = images[currentIndex];
+        document.getElementById('imageModal').style.display = 'flex';
+    }
+    
+    function closeModal() {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+
+    function prevImage() {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+        document.getElementById('modalImg').src = images[currentIndex];
+    }
+
+    function nextImage() {
+        currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+        document.getElementById('modalImg').src = images[currentIndex];
+    }
+
+    document.getElementById('boton-eliminar').addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const body = JSON.stringify({
+            "_id": propiedad._id,
+        });
+
+        await fetch(`/admin/panel/${propiedad._id}/eliminar`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: body,
+        });
+
+        
+        const msg_success = alertify.message(`
+            <div class="flex flex-col custom-button-shadow rounded-lg py-3" style="top:0; background: rgb(92, 186, 79);" >
+                <div class="flex flex-col" style="color: white;">
+                    <div class="flex flex-col px-3 items-left font-bold">
+                        <h1><i class="fas fa-check-circle"></i>&nbsp;Success</h1>
+                        <h1> Propiedad eliminada </h1>
+                    </div>
+                </div>
+            </div>
+        `);
+
+        msg_success.delay(10);
+
+        window.location.href = window.location.origin + "/admin/panel";
+    });
+
+    document.getElementById("boton-crear").addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const body = JSON.stringify({
+            "_id": propiedad._id,
+            "nombre": document.getElementById("nombre").value,
+            "descripcion": document.getElementById("descripcion").value,
+            
+            "tipo":  document.getElementById("tipo").value,
+            
+            "detalles":{
+                "baños": document.getElementById("baños").value,
+                "habitaciones": document.getElementById("habitaciones").value,
+                "tipo_acuerdo": document.getElementById("tipo_acuerdo").value,
+                "estado": document.getElementById("estado").value
+            },
+
+            "contacto": document.getElementById("contacto").value,
+
+            "tipo_moneda": document.getElementById("tipo_moneda").value,
+            "price": document.getElementById("price").value,
+            
+            "lugar": document.getElementById("lugar").value,
+
+            "comuna":document.getElementById("comuna").value,
+            "provincia":document.getElementById("provincia").value,
+            "region":document.getElementById("region").value,
+        });
+
+        await fetch(`/admin/panel/${propiedad._id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: body,
+        });
+
+        const msg_success = alertify.message(`
+            <div class="flex flex-col custom-button-shadow rounded-lg py-3" style="top:0; background: rgb(92, 186, 79);" >
+                <div class="flex flex-col" style="color: white;">
+                    <div class="flex flex-col px-3 items-left font-bold">
+                        <h1><i class="fas fa-check-circle"></i>&nbsp;Success</h1>
+                        <h1> Propiedad actualizada </h1>
+                    </div>
+                </div>
+            </div>
+        `);
+
+        msg_success.delay(10);
+
+        location.reload();
+    });
+</script>

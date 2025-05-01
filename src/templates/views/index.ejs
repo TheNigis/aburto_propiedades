@@ -1,0 +1,257 @@
+
+<link rel="stylesheet" href="/static/css/landing.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+
+<header class="hero">
+    <div class="textos-hero">
+        <h1>Aburto Propiedades</h1>
+        <h2 class="text-3xl">Correrdor de propiedades</h2>
+        <h2 class="text-2xl">Asesoría legal inmobiliaria</h2>
+        <a href="#footer" class="mt-5">Contactanos</a>
+    </div>
+    <div class="svg-hero" style="height: 150px; overflow: hidden;">
+        <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+            <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+        </svg>
+    </div>
+</header>
+<main>
+    <!-- <section class="about-services">
+        <div class="contenedor">
+            <h2 class="titulo"><a name="servicio">Propiedades destacadas</A></h2>
+            <div class="servicio-cont" id="servicio-destacado">
+             
+                <div class="servicio-ind">
+                    <img src="./img/ilustracion4.svg" alt="">
+                    <h3>Big Data y Analisis de Datos</h3>
+                    <p>Almacenamiento de grandes cantidades de datos y
+                      a los procedimientos usados para encontrar patrones repetitivos dentro de esos datos</p>
+                </div>
+                <div class="servicio-ind">
+                    <img src="./img/datascience.svg" alt="">
+                    <h3>DataScience</h3>
+                    <p>Es la ciencia centrada en el estudio de los datos. Se encarga de extraer información de
+                       grandes cantidades de datos. Data Science combina la estadística, las matemáticas y la
+                        informática para interpretar datos. El objetivo es tomar decisiones.</p>
+                </div> 
+
+                
+            </div>
+        </div>
+    </section> -->
+    
+
+    <section class="">
+        <div class="contenedor">
+            <h2 class="titulo"><a name="portafolio"><i class="fa-solid fa-building mr-2"></i>Propiedades destacadas</a></h2>
+            <div class="galeria-port" id="galeria-port"></div>
+        </div>
+    </section>
+
+    <div class="container-plus" >
+        <h2 class="text-center text-2xl text-bold mt-5" style="color:#44732a;"><i class="fa-solid fa-house mr-2"></i>Tenemos interesantes propiedades al alcance de tu mano</h2>
+
+
+        <div class="container" id="propiedades">
+           
+        </div>
+    </div>
+
+
+<style>
+
+        .container-plus{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            flex-direction: column;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            background-color: white;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            padding: 5px 10px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .location::before {
+            content: '\1F4CD'; /* Icono de ubicación */
+            margin-right: 5px;
+        }
+
+</style>
+
+<script>
+    let aleatorios = <%- JSON.stringify(aleatorios) %>;
+    let propiedades = <%- JSON.stringify(propiedades) %>;
+
+
+    // let servicio_destacado = document.getElementById("servicio-destacado");
+    let galeria_port = document.getElementById("galeria-port");
+    let propiedades_item = document.getElementById("propiedades");
+
+    // servicio_destacado.innerHTML = "";
+    galeria_port.innerHTML = "";
+    propiedades_item.innerHTML = "";
+
+    
+    for(let i = 0; i< aleatorios.length; i++){
+        let disponible = true;
+
+        if (aleatorios[i].detalles.estado == "ARRENDADO" || aleatorios[i].detalles.estado == "VENDIDO" ){
+            disponible = false;
+        }
+
+        let color = "bg-green-500"
+        let msg = aleatorios[i].detalles.tipo_acuerdo
+        
+        if (!disponible){
+            color = "bg-red-500"
+            msg = aleatorios[i].detalles.estado
+        }
+
+        if(aleatorios[i].tipo_moneda == "UF"){
+            const formatter = new Intl.NumberFormat('es-CL', {
+                style: 'currency',
+                currency: "CLP",
+                trailingZeroDisplay: 'stripIfInteger'
+            });
+
+            aleatorios[i].price = formatter.format(aleatorios[i].price).replace("$", "") + " UF"
+        } else{
+            const formatter = new Intl.NumberFormat('es-CL', {
+                style: 'currency',
+                currency: aleatorios[i].tipo_moneda,
+                trailingZeroDisplay: 'stripIfInteger'
+            });
+            
+            aleatorios[i].price = formatter.format(aleatorios[i].price);
+        }
+
+        galeria_port.innerHTML += `
+            <a href="/propiedad/${aleatorios[i]._id}" class="card mx-4 my-2" id="carta_${aleatorios[i]._id}">
+                <img src="${aleatorios[i].fotos[0].replace("./public", "/static")}" style="width: 100%; height: auto;" alt="">
+                <div class="badge ${color}">${msg}</div>
+                <div class="card-content">
+                    <div class="title">${aleatorios[i].nombre}</div>
+                    <div class="price">${aleatorios[i].price}</div>
+                    <div class="location">${aleatorios[i].comuna}, ${aleatorios[i].provincia}, ${aleatorios[i].region}</div>
+                </div>
+            </a>
+        `;
+
+    }
+
+    for(let i = 0; i< propiedades.length; i++){
+        let disponible = true;
+
+        if(propiedades[i].tipo_moneda == "UF"){
+            const formatter = new Intl.NumberFormat('es-CL', {
+                style: 'currency',
+                currency: "CLP",
+                trailingZeroDisplay: 'stripIfInteger'
+            });
+
+            propiedades[i].price = formatter.format(propiedades[i].price).replace("$", "") + " UF"
+        } else{
+            const formatter = new Intl.NumberFormat('es-CL', {
+                style: 'currency',
+                currency: propiedades[i].tipo_moneda,
+                trailingZeroDisplay: 'stripIfInteger'
+            });
+            
+            propiedades[i].price = formatter.format(propiedades[i].price);
+        }
+
+        if (propiedades[i].detalles.estado == "ARRENDADO" || propiedades[i].detalles.estado == "VENDIDO" ){
+            disponible = false;
+        }
+
+        let color = "bg-green-500"
+        let msg = propiedades[i].detalles.tipo_acuerdo
+        
+        if (!disponible){
+            color = "bg-red-500"
+            msg = propiedades[i].detalles.estado
+        }
+
+        propiedades_item.innerHTML += `
+            <a href="/propiedad/${propiedades[i]._id}" class="card mx-4 my-2" id="carta_${propiedades[i]._id}">
+                <img src="${propiedades[i].fotos[0].replace("./public", "/static")}" alt="">
+                <div class="badge ${color}">${msg}</div>
+                <div class="card-content">
+                    <div class="title">${propiedades[i].nombre}</div>
+                    <div class="price">${propiedades[i].price}</div>
+                    <div class="location">${propiedades[i].comuna}, ${propiedades[i].provincia}, ${propiedades[i].region}</div>
+                </div>
+            </a>    
+        `;
+    }
+
+    // for(let i = 0; i< aleatorios.length; i++){
+    //     servicio_destacado.innerHTML += `
+    //         <div class="servicio-ind">
+    //             <img src="${aleatorios[i].fotos[0].replace("./public", "/static")}" alt="">
+
+                
+    //             <h3>${aleatorios[i].nombre}</h3>
+    //             <p>${aleatorios[i].descripcion}</p>
+                
+    //         </div>
+    //     `
+    // }
+
+    console.log(aleatorios);
+    </script>

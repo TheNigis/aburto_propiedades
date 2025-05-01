@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+		<link rel="stylesheet" href="/static/css/tailwind.output.css" />
+
+		<link rel="stylesheet" href="/static/css/app.css">
+
+		<!-- <link rel="stylesheet" href="/static/css/app.css" /> -->
+
+		<link rel="preconnect" href="https://fonts.gstatic.com" />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.6/flowbite.min.css" rel="stylesheet" />
+
+
+		<link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+		<%- style %>
+
+		<style>
+		</style>
+
+		<title>Corredor Aburto Propiedades</title>
+	</head>
+
+	<body>
+		<%- include ("../partials/header.ejs") %>
+
+		<main><%- body %></main>
+
+		<%- include ("../partials/footer.ejs") %>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.6/flowbite.min.js"></script>
+		<script src="https://kit.fontawesome.com/d0ea1a138e.js" crossorigin="anonymous"></script>
+		
+		<%- script %>
+	</body>
+</html>
