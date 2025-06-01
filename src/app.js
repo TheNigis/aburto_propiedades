@@ -10,7 +10,7 @@ app.use(flash());
 if (process.env.MONGO_USER != 0){
     global.link = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}`; //:${process.env.MONGO_PORT}
     global.link_collection = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}`; //:${process.env.MONGO_PORT}
-    global.query = `?retryWrites=true&w=majority&appName=ImpulsaCiencia`
+    global.query = `?retryWrites=true&w=majority&appName=corredora-aburto`
 } 
 
 if  (process.env.MONGO_USER == 0){
