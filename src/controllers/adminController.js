@@ -218,22 +218,12 @@ class AdminController{
 
             fotos.push(dirFile);
 
-            if (!fs.existsSync(dir)){
-				fs.mkdirSync(dir);
+            fs.mkdirSync(dir);
 
-				fs.writeFile( dirFile, base64File, { encoding: "base64" }, function (e, data) {
-					if (e) return console.log(e);
-					return
-				});	
-			}
-
-
-			if (fs.existsSync(dir)) {
-                fs.writeFile( dirFile, base64File, { encoding: "base64" }, function (e, data) {
-                    if (e) return console.log(e);
-                    return
-                });	
-			} 
+            fs.writeFile( dirFile, base64File, { encoding: "base64" }, function (e, data) {
+                if (e) return console.log(e);
+                return
+            });	
             
         }
 
