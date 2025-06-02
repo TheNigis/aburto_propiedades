@@ -159,7 +159,6 @@ class AdminController{
         
         // if(!user) res.redirect('/');
 
-        console.log(__dirname);
         
 
         res.render("crearPropiedades", { divisionTerritorial: divisionTerritorial})
@@ -212,8 +211,8 @@ class AdminController{
 
         for(let i = 0; i< data.fotos.length; i++ ){
             const fileId = uuidv4();
-            const dir = `/public/propiedades/${nuevaPropiedad._id}/`;        
-            const dirFile = `/public/propiedades/${nuevaPropiedad._id}/${fileId}.${data.fotos[i].ext}`;  
+            const dir = `${__dirname}/../../public/propiedades/${nuevaPropiedad._id}/`;        
+            const dirFile = `${__dirname}/../../public/propiedades/${nuevaPropiedad._id}/${fileId}.${data.fotos[i].ext}`;  
 
             let base64File = data.fotos[i].file.split(';base64,').pop();
 
