@@ -211,20 +211,14 @@ class AdminController{
 
         for(let i = 0; i< data.fotos.length; i++ ){
             const fileId = uuidv4();
-            const dir = `../../public/propiedades/${nuevaPropiedad._id}/`;        
-            const dirFile = `../../public/propiedades/${nuevaPropiedad._id}/${fileId}.${data.fotos[i].ext}`;  
+            const dir = `${__dirname}/public/propiedades/${nuevaPropiedad._id}/`;        
+            const dirFile = `${__dirname}/public/propiedades/${nuevaPropiedad._id}/${fileId}.${data.fotos[i].ext}`;  
 
             let base64File = data.fotos[i].file.split(';base64,').pop();
 
             fotos.push(dirFile);
 
-
-			if (fs.existsSync(dir)) {
-                fs.writeFile( dirFile, base64File, { encoding: "base64" }, function (e, data) {
-                    if (e) return console.log(e);
-                    return
-                });	
-			} else{
+            if (!fs.existsSync(dir)){
 				fs.mkdirSync(dir);
 
 				fs.writeFile( dirFile, base64File, { encoding: "base64" }, function (e, data) {
@@ -232,6 +226,14 @@ class AdminController{
 					return
 				});	
 			}
+
+
+			if (fs.existsSync(dir)) {
+                fs.writeFile( dirFile, base64File, { encoding: "base64" }, function (e, data) {
+                    if (e) return console.log(e);
+                    return
+                });	
+			} 
             
         }
 
