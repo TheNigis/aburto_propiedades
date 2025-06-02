@@ -8,6 +8,8 @@ const chalk = require("chalk");
 const APP_PORT = process.env.PORT;
 // const APP_HOST = process.env.STEELGO_HOST || 'localhost';
 
+global.dir = __dirname + '/../public';
+
 httpServer.listen(APP_PORT, async () => {
 	console.clear();
 	console.log(
@@ -28,8 +30,8 @@ httpServer.listen(APP_PORT, async () => {
 		chalk.hex('#82FFF8').inverse(APP_PORT)
 	);
 	
-	console.log(__dirname);
-	
+	console.log(global.dir);
+
 	
 
 });
