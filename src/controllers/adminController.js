@@ -121,7 +121,7 @@ class AdminController{
         );
 
         for(let i = 0; i < propiedad.fotos.length; i++) {  // bucle "for in" para recorrer objetos            
-            fs.unlink(`${global.dir}/${propiedad.fotos[i].replace("static", "public")}`, (err) => {  // data[key] devuelve el valor del campo
+            fs.unlink(`${global.dir}/${propiedad.fotos[i].replace("static", "")}`, (err) => {  // data[key] devuelve el valor del campo
                 if(err) throw err;
                 console.log('File deleted: ' + propiedad.fotos[i]);
             });
