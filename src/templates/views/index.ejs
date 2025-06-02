@@ -183,7 +183,7 @@
 
         galeria_port.innerHTML += `
             <a href="/propiedad/${aleatorios[i]._id}" class="card mx-4 my-2" id="carta_${aleatorios[i]._id}">
-                <img src="${aleatorios[i].fotos[0].replace("./public", "/static")}" alt="">
+                <img src="${aleatorios[i].fotos[0]}" alt="">
                 <div class="badge ${color}">${msg}</div>
                 <div class="card-content">
                     <div class="title">${aleatorios[i].nombre}</div>
