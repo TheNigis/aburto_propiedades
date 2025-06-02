@@ -3,6 +3,17 @@ const { user } = require("../middlewares/user-populated");
 const { UserConnection, PropiedadesConnection } = require('../config/db/index');
 const { restart } = require("nodemon");
 
+function generarListaAleatoria(max) {
+	const numeros = [];
+	while (numeros.length > 3) {
+		const num = Math.floor(Math.random() * max);  // Números entre 1 y 100
+		if (!numeros.includes(num)) {
+			numeros.push(num);
+		}
+	}
+	return numeros;
+}
+
 class IndexControllers {
 
 	/**
@@ -54,33 +65,24 @@ class IndexControllers {
 	}
 
 	static async propiedad(req, res) {
-		await UserConnection.connect();
-        const Users = UserConnection.db.models.Users;
-		const Admin = UserConnection.db.models.Admin;
 
 		await PropiedadesConnection.connect();
 		const Propiedades = PropiedadesConnection.db.models.Propiedades;
+
+		console.log('hola');
+		
 
 		let numeros = [];
 		let aleatorios = [];
 
 		let propiedades = await Propiedades.find({ }).lean();
 
-		console.log(req.params.id, typeof req.params.id);
         if(!req.params.id  || req.params.id == undefined || req.params.id == "undefined"){
-            return res.json({ "msg": "fallido" })
+            return res.redirect("/")
         }
 
-		function generarListaAleatoria(max) {
-			const numeros = [];
-			while (numeros.length < 3) {
-				const num = Math.floor(Math.random() * max);  // Números entre 1 y 100
-				if (!numeros.includes(num)) {
-					numeros.push(num);
-				}
-			}
-			return numeros;
-		}
+		console.log('hola');
+		
 
 		numeros = generarListaAleatoria(propiedades.length);
 
@@ -89,6 +91,9 @@ class IndexControllers {
 				aleatorios.push(propiedades[numero]);
 			});
 		}		
+
+		console.log('hola');
+		
 
 		let propiedad = await Propiedades.findById({ _id: req.params.id }, (err, propiedad) => {
 			if (err) throw new Error(err);
