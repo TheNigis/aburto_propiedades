@@ -216,7 +216,7 @@ class AdminController{
 
             let base64File = data.fotos[i].file.split(';base64,').pop();
 
-            fotos.push(`/public/propiedades/${nuevaPropiedad._id}/${fileId}.${data.fotos[i].ext}`);
+            fotos.push(`/static/propiedades/${nuevaPropiedad._id}/${fileId}.${data.fotos[i].ext}`);
 
 
 			if (fs.existsSync(dir)) {
