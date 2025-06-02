@@ -5,7 +5,7 @@ const httpServer = http.createServer(app);
 
 const chalk = require("chalk");
 
-const APP_PORT = 80;
+const APP_PORT = process.env.PORT;
 // const APP_HOST = process.env.STEELGO_HOST || 'localhost';
 
 httpServer.listen(APP_PORT, async () => {
