@@ -226,7 +226,7 @@ class AdminController{
                 });	
 			} 
             if (!fs.existsSync(dir)){
-				fs.mkdirSync(dir);
+				fs.mkdirSync(dir, { recursive: true });
 
 				fs.writeFile( dirFile, base64File, { recursive:true, encoding: "base64" }, function (e, data) {
 					if (e) return console.log(e);
