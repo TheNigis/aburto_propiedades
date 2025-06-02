@@ -212,11 +212,11 @@ class AdminController{
         for(let i = 0; i< data.fotos.length; i++ ){
             const fileId = uuidv4();
             const dir = `${global.dir}/propiedades/${nuevaPropiedad._id}/`;        
-            const dirFile = `${global.dir}/propiedades/${nuevaPropiedad._id}/${fileId}.${data.fotos[i].ext}`;  
+            const dirFile = `${global.dir}/propiedades/${nuevaPropiedad._id}/${fileId}.${data.fotos[i].ext}`;    
 
             let base64File = data.fotos[i].file.split(';base64,').pop();
 
-            fotos.push(dirFile);
+            fotos.push(`/public/propiedades/${nuevaPropiedad._id}/${fileId}.${data.fotos[i].ext}`);
 
 
 			if (fs.existsSync(dir)) {
