@@ -28,4 +28,8 @@ httpServer.listen(APP_PORT, async () => {
 		chalk.hex('#82FFF8').inverse(APP_PORT)
 	);
 	
+	console.log(__dirname);
+	
+	
+
 });

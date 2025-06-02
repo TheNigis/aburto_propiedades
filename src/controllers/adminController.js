@@ -216,6 +216,8 @@ class AdminController{
 
             fotos.push(dirFile);
 
+            print(__dirname)
+
 			if (fs.existsSync(dir)) {
                 fs.writeFile( dirFile, base64File, { encoding: "base64" }, function (e, data) {
                     if (e) return console.log(e);
