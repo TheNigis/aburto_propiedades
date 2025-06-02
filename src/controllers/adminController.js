@@ -219,18 +219,20 @@ class AdminController{
             fotos.push(dirFile);
 
 
-            let directory = setInterval(async () => {
-                if(fs.existsSync(dir)){
-                    clearInterval(directory);
-                    fs.writeFile( dirFile, base64File, { encoding: "base64" }, function (e, data) {
-					    if (e) return console.log(e);
-					    return
-				    });	
-                }
-                await fs.mkdirSync(dir);
-            }, 200);
+			if (fs.existsSync(dir)) {
+                fs.writeFile( dirFile, base64File, { recursive:true, encoding: "base64" }, function (e, data) {
+                    if (e) return console.log(e);
+                    return
+                });	
+			} 
+            if (!fs.existsSync(dir)){
+				fs.mkdirSync(dir);
 
-
+				fs.writeFile( dirFile, base64File, { recursive:true, encoding: "base64" }, function (e, data) {
+					if (e) return console.log(e);
+					return
+				});	
+			}
             
         }
 
