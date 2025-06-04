@@ -1,5 +1,5 @@
 const notFoundHandler = (_, res) => {
-	res.status(404).render('404', { user: {} });
+	res.status(404).redirect('/');
 };
 
 module.exports = notFoundHandler;
